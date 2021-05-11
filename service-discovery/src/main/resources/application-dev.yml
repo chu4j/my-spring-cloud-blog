@@ -1,0 +1,22 @@
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:9800
+  security:
+    user:
+      name: admin
+      password: hvBcfoUsAJJyTxtf
+  application:
+    name: service-discovery
+
+server:
+  port: 8083
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info'
+  endpoint:
+    health:
+      show-details: always

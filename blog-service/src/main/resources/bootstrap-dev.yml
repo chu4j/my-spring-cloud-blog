@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    config:
+      name: blog-service-dev
+      discovery:
+        service-id: config
+        enabled: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:hvBcfoUsAJJyTxtf@localhost:8083/eureka/
+    registry-fetch-interval-seconds: 5

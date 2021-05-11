@@ -1,0 +1,9 @@
+eureka:
+  client:
+    region: default
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://admin:${EUREKA_SECURITY_USER_PASSWORD}@localhost:8083/eureka/
+logging:
+  level:
+    root: info

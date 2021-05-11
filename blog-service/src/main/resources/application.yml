@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active:
+  application:
+    name: blog-service
+  jpa:
+    open-in-view: true
+    database-platform: org.hibernate.dialect.H2Dialect
+my:
+  blog:
+    markdown-file:
+      dir: ${user.home}/markdown

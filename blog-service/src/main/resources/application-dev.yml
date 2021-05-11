@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/my-blog
+    username: h2
+    password: pwd
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    generate-ddl: true
+logging:
+  level:
+    root: info
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'auditevents,beans,conditions,configprops,env,flyway,health,heapdump,httptrace,info,logfile,loggers,liquibase,metrics,mappings,prometheus,scheduledtasks,sessions,shutdown,startup,threaddump'
+  endpoint:
+    health:
+      show-details: always
+server:
+  port: 8084

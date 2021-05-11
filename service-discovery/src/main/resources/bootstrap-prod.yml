@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    config:
+      name: service-discovery-prod
+      uri: http://localhost:8081
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://admin:${EUREKA_SECURITY_USER_PASSWORD}@localhost:8083/eureka/

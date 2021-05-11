@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    config:
+      name: gateway-dev
+      discovery:
+        service-id: config
+        enabled: true
+eureka:
+  client:
+    region: default
+    registry-fetch-interval-seconds: 15
+    service-url:
+      defaultZone: http://admin:hvBcfoUsAJJyTxtf@localhost:8083/eureka/

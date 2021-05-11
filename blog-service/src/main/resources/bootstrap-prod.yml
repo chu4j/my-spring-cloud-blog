@@ -1,0 +1,16 @@
+#要向eureka注册和拉取配置中心配置信息把下面的false改为true
+spring:
+  cloud:
+    config:
+      name: blog-service-prod
+      discovery:
+        service-id: config
+        enabled: false
+      enabled: false
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:${EUREKA_SECURITY_USER_PASSWORD}@localhost:8083/eureka/
+    registry-fetch-interval-seconds: 5
+    register-with-eureka: false
+    fetch-registry: false

@@ -1,0 +1,18 @@
+eureka:
+  client:
+    registry-fetch-interval-seconds: 5
+    serviceUrl:
+      defaultZone: http://admin:hvBcfoUsAJJyTxtf@localhost:8083/eureka/
+server:
+  port: 9800
+spring:
+  application:
+    name: Metrics
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info'
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,25 @@
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:9800
+  security:
+    user:
+      name: admin
+      password: ${EUREKA_SECURITY_USER_PASSWORD}
+  application:
+    name: service-discovery
+
+server:
+  port: 8083
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info'
+  endpoint:
+    health:
+      show-details: always
+logging:
+  level:
+    root: info

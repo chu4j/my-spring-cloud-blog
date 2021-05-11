@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/my-blog
+    username: h2
+    #Set database password from your system env var
+    password: ${BLOG_H2_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    generate-ddl: true
+my:
+  blog:
+    markdown-file:
+      dir: ${user.home}/markdown
+logging:
+  level:
+    root: info
+server:
+  port: 8084

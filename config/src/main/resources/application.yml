@@ -1,0 +1,17 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/konchoo/blog-application-config.git
+          username: konchoo
+          password: ${GITHUB_TOKEN}
+          force-pull: true
+          basedir: file:///${user.home}/config
+          refresh-rate: 60
+  profiles:
+    active: dev
