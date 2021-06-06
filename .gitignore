@@ -4,6 +4,7 @@
 !bin/*.sh
 *.iml
 build/
+.mvn
 src/main/gen
 src/main/resources/templates.list
 src/main/resources/gitignore/*

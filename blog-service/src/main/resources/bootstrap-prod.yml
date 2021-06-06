@@ -5,8 +5,11 @@ spring:
       name: blog-service-prod
       discovery:
         service-id: config
-        enabled: false
-      enabled: false
+        enabled: off
+      enabled: off
+  config:
+    activate:
+      on-profile: prod
 eureka:
   client:
     service-url:

@@ -11,14 +11,6 @@ spring:
     generate-ddl: true
 logging:
   level:
-    root: info
-management:
-  endpoints:
-    web:
-      exposure:
-        include: 'auditevents,beans,conditions,configprops,env,flyway,health,heapdump,httptrace,info,logfile,loggers,liquibase,metrics,mappings,prometheus,scheduledtasks,sessions,shutdown,startup,threaddump'
-  endpoint:
-    health:
-      show-details: always
+    root: debug
 server:
   port: 8084

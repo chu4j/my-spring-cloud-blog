@@ -4,9 +4,15 @@ spring:
       name: blog-service-dev
       discovery:
         service-id: config
-        enabled: true
+        enabled: off
+      enabled: off
+  config:
+    activate:
+      on-profile: dev
 eureka:
   client:
     service-url:
       defaultZone: http://admin:hvBcfoUsAJJyTxtf@localhost:8083/eureka/
-    registry-fetch-interval-seconds: 5
+    registry-fetch-interval-seconds: 60
+    register-with-eureka: false
+    fetch-registry: false
