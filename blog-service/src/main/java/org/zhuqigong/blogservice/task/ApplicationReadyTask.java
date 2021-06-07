@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.zhuqigong.blogservice.model.Post;
 import org.zhuqigong.blogservice.model.User;
 import org.zhuqigong.blogservice.repository.UserRepository;
 import org.zhuqigong.blogservice.service.PostService;
 import org.zhuqigong.blogservice.util.MarkdownUtil;
-import org.zhuqigong.blogservice.util.MessageDigestUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,10 +34,11 @@ public class ApplicationReadyTask {
     private String defaultUser;
     @Value("${my.blog.admin.password}")
     private String defaultPassword;
-
-    public ApplicationReadyTask(PostService postService, UserRepository userRepository) {
+    private final BCryptPasswordEncoder encoder;
+    public ApplicationReadyTask(PostService postService, UserRepository userRepository, BCryptPasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.postService = postService;
+        this.encoder = encoder;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -56,8 +57,7 @@ public class ApplicationReadyTask {
 
     @EventListener(ApplicationReadyEvent.class)
     public void setUpAdminUserTask() {
-        String encryptPassword = MessageDigestUtil.sha2(defaultPassword);
-        userRepository.save(new User(defaultUser, encryptPassword));
+        userRepository.save(new User(defaultUser, encoder.encode(defaultPassword)));
         LOG.info("Default User save success");
     }
 }

@@ -1,22 +1,8 @@
 spring:
   profiles:
-    active: dev
+    active: prod
   application:
     name: blog-service
   jpa:
     open-in-view: true
     database-platform: org.hibernate.dialect.H2Dialect
-my:
-  blog:
-    markdown-file:
-      dir: ${user.home}/markdown
-    admin:
-      user: admin
-      password: admin
-    cross-origin: http://localhost:3000
-    oauth:
-      user: admin
-      password: admin
-    jwt:
-      secret: $avverAtyv70fg
-      expired-milliseconds: 43200000

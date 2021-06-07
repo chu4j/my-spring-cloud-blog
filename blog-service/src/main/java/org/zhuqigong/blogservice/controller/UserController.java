@@ -7,13 +7,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.zhuqigong.blogservice.model.*;
 import org.zhuqigong.blogservice.service.AdminDetailsService;
 import org.zhuqigong.blogservice.service.PostService;
 import org.zhuqigong.blogservice.service.UserService;
 import org.zhuqigong.blogservice.util.JwtUtils;
-import org.zhuqigong.blogservice.util.MessageDigestUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +29,8 @@ public class UserController {
     private JwtUtils jwtUtils;
     @Autowired
     private AdminDetailsService adminDetailsService;
+    @Autowired
+    private PasswordEncoder bCryptPasswordEncoder;
 
     public UserController(UserService userService, PostService postService) {
         this.userService = userService;
@@ -43,15 +46,14 @@ public class UserController {
         if (user == null) {
             return ResponseEntity.ok("User Not Found");
         } else {
-            String unauthorizedPassword = MessageDigestUtil.sha2(password);
-            if (null != unauthorizedPassword && unauthorizedPassword.equals(user.getPassword())) {
+            if (bCryptPasswordEncoder.matches(password, user.getPassword())){
                 //session settings
                 AdminDetails adminDetails = adminDetailsService.loadUserByUsername(user.getUsername());
-                Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDetails, user.getPassword(), adminDetails.getAuthorities()));
+                Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDetails,password, adminDetails.getAuthorities()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 String jwt = jwtUtils.generateJwtToken(authentication);
                 return ResponseEntity.ok(new JwtResponse(adminDetails.getUsername(), jwt));
-            } else {
+            } else{
                 return ResponseEntity.ok("Login Failed,Password Not Right");
             }
         }

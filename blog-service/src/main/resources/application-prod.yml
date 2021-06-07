@@ -10,12 +10,19 @@ spring:
       ddl-auto: create
     show-sql: true
     generate-ddl: true
-my:
-  blog:
-    markdown-file:
-      dir: ${user.home}/markdown
 logging:
   level:
     root: info
 server:
   port: 8084
+my:
+  blog:
+    markdown-file:
+      dir: ${user.home}/markdown
+    admin:
+      user: admin
+      password: ${BLOG_ADMIN_PASSWORD}
+    cross-origin: http://localhost:3000
+    jwt:
+      secret: $avverAtyv0fg7algTgaXae
+      expired-milliseconds: 43200000

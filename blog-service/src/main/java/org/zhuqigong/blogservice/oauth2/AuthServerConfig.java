@@ -9,10 +9,10 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 
 @Configuration
 @EnableAuthorizationServer
-public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
 
-    public Oauth2ServerConfig(
+    public AuthServerConfig(
             AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
@@ -28,5 +28,4 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager);
     }
-
 }

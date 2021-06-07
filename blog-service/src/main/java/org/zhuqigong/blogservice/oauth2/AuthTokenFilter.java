@@ -1,4 +1,4 @@
-package org.zhuqigong.blogservice.filter;
+package org.zhuqigong.blogservice.oauth2;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

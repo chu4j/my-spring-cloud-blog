@@ -1,4 +1,4 @@
-package org.zhuqigong.blogservice.filter;
+package org.zhuqigong.blogservice.oauth2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +26,6 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
             throws IOException {
         logger.error("Unauthorized error: {}", authException.getMessage());
         responseUtil.corsHeaderSetUp(response);
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Error: Unauthorized");
     }
 }
