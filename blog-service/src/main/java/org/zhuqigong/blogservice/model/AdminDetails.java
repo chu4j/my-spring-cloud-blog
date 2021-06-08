@@ -9,9 +9,9 @@ import java.util.List;
 public class AdminDetails implements UserDetails {
     private final String username;
     private final String password;
-    private final List<Role> authorities;
+    private final List<UserRole> authorities;
 
-    public AdminDetails(String username, String password, List<Role> authorities) {
+    public AdminDetails(String username, String password, List<UserRole> authorities) {
         this.username = username;
         this.password = password;
         this.authorities = authorities;

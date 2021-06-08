@@ -2,17 +2,17 @@ package org.zhuqigong.blogservice.model;
 
 import java.util.List;
 
-public class PagePost {
+public class PostResponseEntity {
     private Long total;
     private Integer totalPage;
     private Integer currentPage;
     private List<Post> list;
 
-    public PagePost() {
+    public PostResponseEntity() {
     }
 
-    public PagePost(Long total, Integer totalPage, Integer currentPage,
-                    List<Post> list) {
+    public PostResponseEntity(Long total, Integer totalPage, Integer currentPage,
+                              List<Post> list) {
         this.total = total;
         this.totalPage = totalPage;
         this.currentPage = currentPage;

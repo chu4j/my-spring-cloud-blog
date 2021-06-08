@@ -1,16 +1,18 @@
 package org.zhuqigong.blogservice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import javax.persistence.*;
 
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String category;
+    @Transient
+    private Long count;
 
     public Category() {
     }
@@ -18,6 +20,11 @@ public class Category {
     public Category(Long id, String category) {
         this.id = id;
         this.category = category;
+    }
+
+    public Category(String category, Long count) {
+        this.category = category;
+        this.count = count;
     }
 
     public Category(String category) {
@@ -38,5 +45,13 @@ public class Category {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Long getCount() {
+        return count;
+    }
+
+    public void setCount(Long count) {
+        this.count = count;
     }
 }

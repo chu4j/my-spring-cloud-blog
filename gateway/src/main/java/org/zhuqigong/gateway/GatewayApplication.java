@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Bean;
 @EnableFeignClients
 public class GatewayApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(GatewayApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayApplication.class, args);
+    }
 
-  @Bean
-  public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-    return builder.routes()
-        .route("blog-service", r -> r.path("/blog/**").uri("http://localhost:8084"))
-        .build();
-  }
+    @Bean
+    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("blog-service", r -> r.path("/blog/**").uri("http://localhost:8084"))
+                .build();
+    }
 }

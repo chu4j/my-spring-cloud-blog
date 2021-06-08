@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableAdminServer
 public class MetricsApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(MetricsApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(MetricsApplication.class, args);
+    }
 
 }

@@ -1,10 +1,10 @@
 package org.zhuqigong.blogservice.model;
 
-public class JwtResponse {
+public class JwtResponseEntity {
     private String username;
     private String accessToken;
 
-    public JwtResponse(String username, String accessToken) {
+    public JwtResponseEntity(String username, String accessToken) {
         this.username = username;
         this.accessToken = accessToken;
     }

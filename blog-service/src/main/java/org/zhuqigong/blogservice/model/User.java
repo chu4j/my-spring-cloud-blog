@@ -1,9 +1,7 @@
 package org.zhuqigong.blogservice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -12,6 +10,9 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role")
+    private List<UserRole> userRoles;
 
     public User(String username, String password) {
         this.username = username;
@@ -19,6 +20,14 @@ public class User {
     }
 
     public User() {
+    }
+
+    public List<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
     public Long getId() {

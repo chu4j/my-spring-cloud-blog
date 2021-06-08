@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.zhuqigong.blogservice.model.Category;
-import org.zhuqigong.blogservice.model.CategoryCount;
 import org.zhuqigong.blogservice.service.CategoryService;
 
 import java.util.HashMap;
@@ -21,12 +20,12 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public List<CategoryCount> getCategories() {
+    public List<Category> getCategories() {
         return categoryService.findCategories()
                 .stream()
                 .collect(Collectors.groupingBy(Category::getCategory, HashMap::new, Collectors.counting()))
                 .entrySet()
-                .stream().map(entry -> new CategoryCount(entry.getKey(), entry.getValue()))
+                .stream().map(entry -> new Category(entry.getKey(), entry.getValue()))
                 .sorted((o1, o2) -> o2.getCount().compareTo(o1.getCount()))
                 .collect(Collectors.toList());
     }
