@@ -5,7 +5,6 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -79,7 +78,7 @@ public class PostService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @CleanUpCache
-    public RestResponseEntity saveOrUpdatePost(Post post) {
+    public Map<String, Object> saveOrUpdatePost(Post post) {
         if (null != post.getId()) {
             Post oldPost = postRepository.findById(post.getId()).orElse(new Post());
             String title = oldPost.getTitle();
@@ -98,7 +97,11 @@ public class PostService {
             } catch (IOException e) {
                 LOG.info("File:{} delete failed", oldMarkdownFilePath);
             }
-            return new RestResponseEntity(200, "Update post success.");
+            return new ResponseBuilder()
+                    .append("status", 200)
+                    .append("message", "Update post success")
+                    .append("id", aPost.getId())
+                    .build();
         } else {
             Post repeatTitlePost = postRepository.findPostByTitle(post.getTitle()).orElse(null);
             if (repeatTitlePost == null) {
@@ -114,14 +117,23 @@ public class PostService {
                 } catch (IOException e) {
                     LOG.info("Save File:[{}] failed", newMarkdownFilePath);
                 }
-                return new RestResponseEntity(200, "Insert new post success");
+                return new ResponseBuilder()
+                        .append("status", 200)
+                        .append("message", "Insert new post success")
+                        .append("id", aPost.getId())
+                        .build();
             } else {
                 LOG.info("Repeat title is exists , repeat title is [{}]", repeatTitlePost.getTitle());
-                return new RestResponseEntity(200, "Insert new post failed,because repeat title exists");
+                return new ResponseBuilder()
+                        .append("status", 200)
+                        .append("message", "Insert new post failed,because repeat title exists")
+                        .append("id", repeatTitlePost.getId())
+                        .build();
             }
         }
 
     }
+
     public Post findPostByPostId(Long postId) throws PostNotFoundException {
         String key = CacheUtil.getCacheKey(request, postId);
         Post cachePost = cache.asMap().getOrDefault(key, Collections.emptyList()).stream().findFirst().orElse(null);
@@ -202,7 +214,7 @@ public class PostService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @CleanUpCache
-    public RestResponseEntity deletePost(Long postId) {
+    public Map<String, Object> deletePost(Long postId) {
         try {
             Post p = postRepository.findById(postId).orElse(new Post());
             postRepository.delete(p);
@@ -210,13 +222,13 @@ public class PostService {
             if (null != p.getId()) {
                 String markdownFilePath = markdownFileDir + File.separator + p.getTitle() + ".md";
                 Files.delete(Paths.get(markdownFilePath));
-                return new RestResponseEntity(200, "Post by delete success that id is " + postId);
+                return new ResponseBuilder().append("message", "Post by delete success that id is " + postId).build();
             } else {
-                return new RestResponseEntity(200, "Post Not Found");
+                return new ResponseBuilder().append("message", "Post Not Found").build();
             }
         } catch (Exception e) {
             LOG.error(e.getMessage());
-            return new RestResponseEntity(500, "Post delete failed : " + e.getMessage());
+            return new ResponseBuilder().append("message", "Post delete failed : " + e.getMessage()).build();
         }
     }
 }

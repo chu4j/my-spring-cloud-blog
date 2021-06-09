@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.zhuqigong.blogservice.model.Post;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration

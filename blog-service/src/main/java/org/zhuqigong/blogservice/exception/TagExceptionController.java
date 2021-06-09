@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class TagExceptionController {
-  @ExceptionHandler(value = TagNotFoundException.class)
-  public ResponseEntity<Object> tagNotFoundException(TagNotFoundException tagNotFoundException) {
-    return new ResponseEntity<>(tagNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
-  }
+    @ExceptionHandler(value = TagNotFoundException.class)
+    public ResponseEntity<Object> tagNotFoundException(TagNotFoundException tagNotFoundException) {
+        return new ResponseEntity<>(tagNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

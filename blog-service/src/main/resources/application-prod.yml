@@ -21,8 +21,8 @@ my:
       dir: ${user.home}/markdown
     admin:
       user: admin
-      password: ${BLOG_ADMIN_PASSWORD}
-    cross-origin: http://localhost:3000
+      password: ${ADMIN_PASSWORD}
+    cross-origin: https://explore.zhuqigong.xyz
     jwt:
       secret: $avverAtyv0fg7algTgaXae
       expired-milliseconds: 43200000

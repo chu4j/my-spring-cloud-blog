@@ -14,7 +14,7 @@ public class ExtendedErrorAttributes extends DefaultErrorAttributes {
         options.including(ErrorAttributeOptions.Include.MESSAGE);
         options.including(ErrorAttributeOptions.Include.EXCEPTION);
         Map<String, Object> attributes = super.getErrorAttributes(webRequest, options);
-        String message = super.getMessage(webRequest,super.getError(webRequest));
+        String message = super.getMessage(webRequest, super.getError(webRequest));
         attributes.put("message", message);
         return attributes;
     }

@@ -6,7 +6,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +14,8 @@ import org.zhuqigong.blogservice.service.AdminDetailsService;
 import org.zhuqigong.blogservice.service.AdminService;
 import org.zhuqigong.blogservice.service.PostService;
 import org.zhuqigong.blogservice.util.JwtUtils;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -62,8 +63,8 @@ public class AdminController {
 
     @PostMapping("/post/create")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public RestResponseEntity createNewPost(@RequestParam(required = false) Long id, @RequestParam String title,
-                                            @RequestParam String content) {
+    public Map<String, Object> createNewPost(@RequestParam(required = false) Long id, @RequestParam String title,
+                                             @RequestParam String content) {
         Post p = new Post();
         if (null != id) {
             p.setId(id);
@@ -75,7 +76,7 @@ public class AdminController {
 
     @DeleteMapping("/post/delete/id/{postId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public RestResponseEntity deletePost(@PathVariable Long postId) {
+    public Map<String, Object> deletePost(@PathVariable Long postId) {
         return postService.deletePost(postId);
     }
 
@@ -87,18 +88,18 @@ public class AdminController {
     }
 
     @PostMapping("/signOut")
-    public RestResponseEntity signOut() {
+    public Map<String, ?> signOut() {
         return null;
     }
 
     @PostMapping("/post/upload")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public RestResponseEntity upload(@RequestParam MultipartFile[] files) {
+    public Map<String, ?> upload(@RequestParam MultipartFile[] files) {
         try {
             adminService.saveMarkdownFile(files);
-            return new RestResponseEntity(200, "Upload markdown file success");
+            return new ResponseBuilder().append("message", "Upload markdown file success").build();
         } catch (Exception e) {
-            return new RestResponseEntity(500, "Upload markdown error");
+            return new ResponseBuilder().append("message", "Upload markdown error").build();
         }
     }
 }

@@ -11,17 +11,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableEurekaServer
 public class ServiceDiscoveryApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(ServiceDiscoveryApplication.class, args);
-  }
-
-  @EnableWebSecurity
-  static
-  class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.csrf().ignoringAntMatchers("/eureka/**");
-      super.configure(http);
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceDiscoveryApplication.class, args);
     }
-  }
+
+    @EnableWebSecurity
+    static
+    class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.csrf().ignoringAntMatchers("/eureka/**");
+            super.configure(http);
+        }
+    }
 }
