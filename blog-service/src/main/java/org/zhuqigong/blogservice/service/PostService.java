@@ -91,6 +91,7 @@ public class PostService {
             String oldMarkdownFilePath = markdownFileDir + File.separator + title + ".md";
             try {
                 Files.delete(Paths.get(oldMarkdownFilePath));
+                FileUtils.writeStringToFile(new File(aPost.getTitle()), aPost.getContent(), StandardCharsets.UTF_8);
             } catch (IOException e) {
                 LOG.info("File:{} delete failed", oldMarkdownFilePath);
             }
