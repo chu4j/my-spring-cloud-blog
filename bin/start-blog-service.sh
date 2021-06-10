@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 java_version=$(java -version 2>&1 >/dev/null | grep 'java version' | awk '{print $3}')
 if [ -z "$java_version" ]; then
-  ecddho "JAVA NOT FOUND IN SYSTEM"
+  echo "JAVA NOT FOUND IN SYSTEM"
 else
   echo "FIND JAVA VERSION $java_version INSTALL IN ${JAVA_HOME}"
 fi

@@ -11,7 +11,7 @@ spring:
     generate-ddl: true
 logging:
   level:
-    root: info
+    root: debug
 server:
   port: 8084
 my:
@@ -21,7 +21,7 @@ my:
     admin:
       user: admin
       password: admin
-    cross-origin: http://localhost:3000
+    cross-origin: http://localhost:8443,http://localhost:3000,http://localhost:80,http://localhost:433,http://localhost:455,https://explore.zhuqigong.xyz
     jwt:
       secret: $avverAtyv70fg
       expired-milliseconds: 43200000

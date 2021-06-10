@@ -22,7 +22,7 @@ my:
     admin:
       user: admin
       password: ${ADMIN_PASSWORD}
-    cross-origin: https://explore.zhuqigong.xyz
+    cross-origin: http://localhost:8443,http://localhost:3000,http://localhost:80,http://localhost:433,http://localhost:455,https://explore.zhuqigong.xyz
     jwt:
       secret: $avverAtyv0fg7algTgaXae
       expired-milliseconds: 43200000

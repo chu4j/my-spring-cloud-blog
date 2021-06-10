@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.zhuqigong.blogservice.model.AdminDetails;
 import org.zhuqigong.blogservice.service.AdminDetailsService;
 import org.zhuqigong.blogservice.util.JwtUtils;
-import org.zhuqigong.blogservice.util.ResponseUtil;
+import org.zhuqigong.blogservice.util.CorsResponseUtil;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,7 +27,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private AdminDetailsService adminDetailsService;
     @Autowired
-    private ResponseUtil responseUtil;
+    private CorsResponseUtil corsResponseUtil;
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
@@ -35,7 +35,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                                     @NotNull FilterChain filterChain)
             throws ServletException, IOException {
         if (request.getMethod().equalsIgnoreCase("options")) {
-            responseUtil.corsHeaderSetUp(response);
+            corsResponseUtil.corsHeaderSetUp(request,response);
             return;
         }
         try {
