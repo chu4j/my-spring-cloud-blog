@@ -89,9 +89,10 @@ public class PostService {
             tagRepository.saveAll(aPost.getTags());
             postRepository.save(aPost);
             String oldMarkdownFilePath = markdownFileDir + File.separator + title + ".md";
+            String newMarkdownFilePath = markdownFileDir + File.separator + aPost.getTitle() + ".md";
             try {
                 Files.delete(Paths.get(oldMarkdownFilePath));
-                FileUtils.writeStringToFile(new File(aPost.getTitle()), aPost.getContent(), StandardCharsets.UTF_8);
+                FileUtils.writeStringToFile(new File(newMarkdownFilePath), aPost.getContent(), StandardCharsets.UTF_8);
             } catch (IOException e) {
                 LOG.info("File:{} delete failed", oldMarkdownFilePath);
             }
@@ -109,11 +110,11 @@ public class PostService {
                 LOG.info("Create Post:Post title:{}", aPost.getTitle());
                 postRepository.save(aPost);
                 //Save markdown text as file
-                String newMarkdownFilePath = markdownFileDir + File.separator + aPost.getTitle() + ".md";
+                String markdownFilePath = markdownFileDir + File.separator + aPost.getTitle() + ".md";
                 try {
-                    FileUtils.writeStringToFile(new File(newMarkdownFilePath), aPost.getContent(), StandardCharsets.UTF_8);
+                    FileUtils.writeStringToFile(new File(markdownFilePath), aPost.getContent(), StandardCharsets.UTF_8);
                 } catch (IOException e) {
-                    LOG.info("Save File:[{}] failed", newMarkdownFilePath);
+                    LOG.info("Save File:[{}] failed", markdownFilePath);
                 }
                 return new ResponseBuilder()
                         .append("status", 200)
