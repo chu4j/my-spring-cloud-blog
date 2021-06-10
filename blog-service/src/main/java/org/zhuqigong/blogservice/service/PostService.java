@@ -30,7 +30,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -82,12 +81,10 @@ public class PostService {
         if (null != post.getId()) {
             Post oldPost = postRepository.findById(post.getId()).orElse(new Post());
             String title = oldPost.getTitle();
-            Map<String, Long> categoriesMap = oldPost.getCategories().stream().collect(Collectors.toMap(Category::getCategory, Category::getId));
-            Map<String, Long> tagsMap = oldPost.getTags().stream().collect(Collectors.toMap(Tag::getTag, Tag::getId));
             Post aPost = MarkdownUtil.format(post.getTitle(), post.getContent());
-            aPost.setId(post.getId());
-            aPost.setCategories(aPost.getCategories().stream().map(c -> new Category(categoriesMap.getOrDefault(c.getCategory(), null), c.getCategory())).collect(Collectors.toList()));
-            aPost.setTags(aPost.getTags().stream().map(t -> new Tag(tagsMap.getOrDefault(t.getTag(), null), t.getTag())).collect(Collectors.toList()));
+            aPost.setId(oldPost.getId());
+            categoryRepository.deleteAll(oldPost.getCategories());
+            tagRepository.deleteAll(oldPost.getTags());
             categoryRepository.saveAll(aPost.getCategories());
             tagRepository.saveAll(aPost.getTags());
             postRepository.save(aPost);
