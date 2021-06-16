@@ -4,15 +4,15 @@ public class PageParamsUtil {
     private PageParamsUtil() {
     }
 
-    public static Integer securePageNumber(Integer page) {
+    public static int securePageNumber(int page) {
         //page should start with 0
         page = Math.max(page - 1, 0);
-        //max request page is 100
-        page = Math.min(page, 100);
+        //max request page is 300
+        page = Math.min(page, 300);
         return page;
     }
 
-    public static Integer securePageSize(Integer size) {
+    public static int securePageSize(int size) {
         //min 1items be request
         size = Math.max(size, 1);
         //max  10 items be request in single request
@@ -20,7 +20,7 @@ public class PageParamsUtil {
         return size;
     }
 
-    public static Integer calculateTotalPage(Long total, Integer adaptSize) {
+    public static int calculateTotalPage(long total, int adaptSize) {
         return (int) ((total / adaptSize) + (total % adaptSize == 0 ? 0 : 1));
     }
 }

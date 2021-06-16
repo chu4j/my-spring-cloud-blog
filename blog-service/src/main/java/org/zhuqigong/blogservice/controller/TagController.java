@@ -23,7 +23,7 @@ public class TagController {
     public List<Tag> getTags() {
         return tagService.findTags()
                 .stream()
-                .collect(Collectors.groupingBy(Tag::getTag, HashMap::new, Collectors.counting()))
+                .collect(Collectors.groupingBy(Tag::getTagName, HashMap::new, Collectors.counting()))
                 .entrySet()
                 .stream().map(entry -> new Tag(entry.getKey(), entry.getValue()))
                 .sorted((o1, o2) -> o2.getCount().compareTo(o1.getCount()))

@@ -75,7 +75,7 @@ public class MarkdownUtil {
         HtmlRenderer htmlRenderer = HtmlRenderer.builder(options).build();
         Node nodes = markdownParser.parse(markdownText);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        final String defaultTitle = new SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis());
+        final String defaultTitle = sdf.format(System.currentTimeMillis());
         YamlMarkdownHeader yamlMarkdownHeader = new YamlMarkdownHeader(defaultTitle, "konc", new Date(), Collections.singletonList(UNKNOWN), Collections.singletonList(UNKNOWN));
         Node markdownBody = markdownParser.parse("");
         AtomicBoolean hasYamlBlock = new AtomicBoolean(false);
@@ -84,9 +84,10 @@ public class MarkdownUtil {
                 AbstractYamlFrontMatterVisitor visitor = new AbstractYamlFrontMatterVisitor();
                 visitor.visit(block);
                 Map<String, List<String>> data = visitor.getData();
-                String title = data.getOrDefault("title", Collections.singletonList(markdownTitle == null ? defaultTitle : markdownTitle)).get(0);
+                String title = data.getOrDefault("title", Collections.singletonList(markdownTitle == null || markdownTitle.isEmpty() ? defaultTitle : markdownTitle)).get(0);
                 String author = data.getOrDefault("author", Collections.singletonList("Anonymous")).get(0);
                 String dateStr = data.getOrDefault("date", Collections.singletonList(sdf.format(new Date()))).get(0);
+                String backgroundImage = data.getOrDefault("background", Collections.singletonList(null)).get(0);
                 Date date = null;
                 try {
                     date = sdf.parse(dateStr);
@@ -96,6 +97,7 @@ public class MarkdownUtil {
                 List<String> categories = data.getOrDefault("categories", Collections.singletonList(UNKNOWN));
                 List<String> tags = data.getOrDefault("tags", Collections.singletonList(UNKNOWN));
                 LOG.info("Title:{},\tAuthor:{},\tDate:{},\tCategories:{},\tTags:{}. ", title, author, date, Arrays.toString(categories.toArray()), Arrays.toString(tags.toArray()));
+                yamlMarkdownHeader.setBackgroundImage(backgroundImage);
                 yamlMarkdownHeader.setTitle(title);
                 yamlMarkdownHeader.setAuthor(author);
                 yamlMarkdownHeader.setDate(date);
@@ -123,18 +125,18 @@ public class MarkdownUtil {
         String catalogueBody = "<ul>" + anchorRefs.stream()
                 .map(pair -> String.format("<li><a href=\"#%s\">", pair.getFirst()) + pair.getSecond() + "</a></li>")
                 .collect(Collectors.joining()) + "</ul>";
-        Post newPost = new Post();
+        Post post = new Post();
         String html = htmlRenderer.render(markdownBody);
-        newPost.setTitle(yamlMarkdownHeader.getTitle());
-        newPost.setAuthor(yamlMarkdownHeader.getAuthor());
-        newPost.setPublishTime(yamlMarkdownHeader.getDate());
-        newPost.setCatalogue(catalogue);
-        newPost.setCatalogueBody(catalogueBody);
-        newPost.setCategories(yamlMarkdownHeader.getCategories().stream().map(Category::new).collect(Collectors.toList()));
-        newPost.setTags(yamlMarkdownHeader.getTags().stream().map(Tag::new).collect(Collectors.toList()));
-        newPost.setContent(markdownBody.getChildChars().toStringOrNull());
-        newPost.setContentBody(html);
-        LOG.info("Post: [{}] save to database success", newPost.getTitle());
-        return newPost;
+        post.setTitle(yamlMarkdownHeader.getTitle());
+        post.setAuthor(yamlMarkdownHeader.getAuthor());
+        post.setPublishTime(yamlMarkdownHeader.getDate());
+        post.setRemark1(yamlMarkdownHeader.getBackgroundImage());
+        post.setCatalogue(catalogue);
+        post.setCatalogueBody(catalogueBody);
+        post.setCategories(yamlMarkdownHeader.getCategories().stream().map(Category::new).collect(Collectors.toList()));
+        post.setTags(yamlMarkdownHeader.getTags().stream().map(Tag::new).collect(Collectors.toList()));
+        post.setContent(markdownBody.getChildChars().toStringOrNull());
+        post.setContentBody(html);
+        return post;
     }
 }

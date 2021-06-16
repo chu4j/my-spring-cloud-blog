@@ -6,12 +6,10 @@ import java.util.List;
 public class YamlMarkdownHeader {
     private String title;
     private String author;
+    private String backgroundImage;
     private Date date;
     private List<String> categories;
     private List<String> tags;
-
-    public YamlMarkdownHeader() {
-    }
 
     public YamlMarkdownHeader(String title, String author, Date date,
                               List<String> categories, List<String> tags) {
@@ -20,6 +18,14 @@ public class YamlMarkdownHeader {
         this.date = date;
         this.categories = categories;
         this.tags = tags;
+    }
+
+    public String getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 
     public String getTitle() {

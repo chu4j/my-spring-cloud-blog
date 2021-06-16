@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
-    Optional<List<Tag>> findByTag(String tagName);
+    Optional<List<Tag>> findByTagName(String tagName);
 }

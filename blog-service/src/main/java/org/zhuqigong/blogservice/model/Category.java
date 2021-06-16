@@ -10,25 +10,25 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String category;
+    private String categoryName;
     @Transient
     private Long count;
 
     public Category() {
     }
 
-    public Category(Long id, String category) {
+    public Category(Long id, String categoryName) {
         this.id = id;
-        this.category = category;
+        this.categoryName = categoryName;
     }
 
-    public Category(String category, Long count) {
-        this.category = category;
+    public Category(String categoryName, Long count) {
+        this.categoryName = categoryName;
         this.count = count;
     }
 
-    public Category(String category) {
-        this.category = category;
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public Long getId() {
@@ -39,12 +39,12 @@ public class Category {
         this.id = id;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryName(String category) {
+        this.categoryName = category;
     }
 
     public Long getCount() {

@@ -10,25 +10,25 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String tag;
+    private String tagName;
     @Transient
     private Long count;
 
     public Tag() {
     }
 
-    public Tag(Long id, String tag) {
+    public Tag(Long id, String tagName) {
         this.id = id;
-        this.tag = tag;
+        this.tagName = tagName;
     }
 
-    public Tag(String tag, Long count) {
-        this.tag = tag;
+    public Tag(String tagName, Long count) {
+        this.tagName = tagName;
         this.count = count;
     }
 
-    public Tag(String tag) {
-        this.tag = tag;
+    public Tag(String tagName) {
+        this.tagName = tagName;
     }
 
     public Long getId() {
@@ -39,12 +39,12 @@ public class Tag {
         this.id = id;
     }
 
-    public String getTag() {
-        return tag;
+    public String getTagName() {
+        return tagName;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setTagName(String tag) {
+        this.tagName = tag;
     }
 
     public Long getCount() {

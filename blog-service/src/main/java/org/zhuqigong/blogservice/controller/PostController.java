@@ -4,8 +4,10 @@ import org.springframework.web.bind.annotation.*;
 import org.zhuqigong.blogservice.exception.NotFoundException;
 import org.zhuqigong.blogservice.exception.PostNotFoundException;
 import org.zhuqigong.blogservice.model.Post;
-import org.zhuqigong.blogservice.model.PostResponseEntity;
 import org.zhuqigong.blogservice.service.PostService;
+
+import java.util.Collection;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/blog")
@@ -17,7 +19,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public PostResponseEntity findPosts(@RequestParam int page, @RequestParam int size) {
+    public Map<String, Object> findPosts(@RequestParam int page, @RequestParam int size) {
         return postService.getPosts(page, size);
     }
 
@@ -32,22 +34,23 @@ public class PostController {
     }
 
     @GetMapping("/category/{categoryName}")
-    public PostResponseEntity getPostByCategoryName(@PathVariable String categoryName,
-                                                    @RequestParam Integer page, @RequestParam Integer size)
+    public Map<String, Object> getPostByCategoryName(@PathVariable String categoryName,
+                                                     @RequestParam Integer page, @RequestParam Integer size)
             throws NotFoundException {
         return postService.findPostByCategory(categoryName, page, size);
     }
 
     @GetMapping("/tag/{tagName}")
-    public PostResponseEntity getPostByTagName(@PathVariable String tagName, Integer page, Integer size)
+    public Map<String, Object> getPostByTagName(@PathVariable String tagName, Integer page, Integer size)
             throws NotFoundException {
         return postService.findPostByTag(tagName, page, size);
     }
 
     @GetMapping("/tiny/posts")
-    public PostResponseEntity getTinyPosts(@RequestParam Integer page, @RequestParam Integer size) {
-        PostResponseEntity postResponseEntity = postService.getPosts(page, size);
-        postResponseEntity.getList()
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getTinyPosts(@RequestParam Integer page, @RequestParam Integer size) {
+        Map<String, Object> data = postService.getPosts(page, size);
+        ((Collection<Post>) data.get("list"))
                 .forEach(e -> {
                     e.setContentBody(null);
                     e.setContent(null);
@@ -59,6 +62,6 @@ public class PostController {
                     e.setLastUpdatedTime(null);
                     e.setCreatedTime(null);
                 });
-        return postResponseEntity;
+        return data;
     }
 }

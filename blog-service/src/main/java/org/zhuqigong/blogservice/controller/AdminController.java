@@ -9,7 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.zhuqigong.blogservice.model.*;
+import org.zhuqigong.blogservice.model.AdminDetails;
+import org.zhuqigong.blogservice.model.Post;
+import org.zhuqigong.blogservice.model.ResponseBuilder;
+import org.zhuqigong.blogservice.model.User;
 import org.zhuqigong.blogservice.service.AdminDetailsService;
 import org.zhuqigong.blogservice.service.AdminService;
 import org.zhuqigong.blogservice.service.PostService;
@@ -37,10 +40,10 @@ public class AdminController {
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
+    public Map<String, Object> login(@RequestParam String username, @RequestParam String password) {
         User user = adminService.findUserByUsername(username).orElse(null);
         if (user == null) {
-            return ResponseEntity.ok("User Not Found");
+            return new ResponseBuilder().status(200).message("User Not Found").build();
         } else {
             if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
                 //session settings
@@ -48,16 +51,19 @@ public class AdminController {
                 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(adminDetails, password, adminDetails.getAuthorities()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 String jwt = jwtUtils.generateJwtToken(authentication);
-                return ResponseEntity.ok(new JwtResponseEntity(adminDetails.getUsername(), jwt));
+                return new ResponseBuilder().status(200).message("Sign in success")
+                        .append("username", adminDetails.getUsername())
+                        .append("accessToken", jwt)
+                        .build();
             } else {
-                return ResponseEntity.ok("Login Failed,Password Not Right");
+                return new ResponseBuilder().status(200).message("Login Failed,Password Not Right").build();
             }
         }
     }
 
     @GetMapping("/posts")
     @PreAuthorize("hasAnyAuthority({'ADMIN','USER'})")
-    public PostResponseEntity findPosts(@RequestParam int page, @RequestParam int size) {
+    public Map<String, Object> findPosts(@RequestParam int page, @RequestParam int size) {
         return postService.getPosts(page, size);
     }
 
@@ -88,18 +94,18 @@ public class AdminController {
     }
 
     @PostMapping("/signOut")
-    public Map<String, ?> signOut() {
+    public Map<String, Object> signOut() {
         return null;
     }
 
     @PostMapping("/post/upload")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Map<String, ?> upload(@RequestParam MultipartFile[] files) {
+    public Map<String, Object> upload(@RequestParam MultipartFile[] files) {
         try {
             adminService.saveMarkdownFile(files);
-            return new ResponseBuilder().append("message", "Upload markdown file success").build();
+            return new ResponseBuilder().message("Upload markdown file success").build();
         } catch (Exception e) {
-            return new ResponseBuilder().append("message", "Upload markdown error").build();
+            return new ResponseBuilder().message("Upload markdown error").build();
         }
     }
 }

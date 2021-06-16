@@ -23,7 +23,7 @@ public class CategoryController {
     public List<Category> getCategories() {
         return categoryService.findCategories()
                 .stream()
-                .collect(Collectors.groupingBy(Category::getCategory, HashMap::new, Collectors.counting()))
+                .collect(Collectors.groupingBy(Category::getCategoryName, HashMap::new, Collectors.counting()))
                 .entrySet()
                 .stream().map(entry -> new Category(entry.getKey(), entry.getValue()))
                 .sorted((o1, o2) -> o2.getCount().compareTo(o1.getCount()))

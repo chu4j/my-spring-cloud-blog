@@ -13,6 +13,18 @@ public class ResponseBuilder implements MapResponse<String, Object> {
     }
 
     @Override
+    public MapResponse<String, Object> message(Object message) {
+        map.put("message", message);
+        return this;
+    }
+
+    @Override
+    public MapResponse<String, Object> status(Object status) {
+        map.put("status", status);
+        return this;
+    }
+
+    @Override
     public Map<String, Object> build() {
         return this.map;
     }

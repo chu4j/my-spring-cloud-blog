@@ -26,6 +26,6 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
             throws IOException {
         logger.error("Unauthorized error: {}", authException.getMessage());
         corsResponseUtil.corsHeaderSetUp(request, response);
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized,Please SignIn...");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized , Please Sign In...");
     }
 }
