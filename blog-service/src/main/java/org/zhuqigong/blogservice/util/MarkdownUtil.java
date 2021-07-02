@@ -38,14 +38,12 @@ public class MarkdownUtil {
     }
 
     public static String formatMarkdown2Html(String markdown, boolean containsYamlBlock) {
-        DataHolder options =
-                PegdownOptionsAdapter.flexmarkOptions(true, PegdownExtensions.ALL)
-                        .toMutable()
-                        .set(Parser.EXTENSIONS,
-                                Collections.singleton(YamlFrontMatterExtension.create()))
-                        .set(HtmlRenderer.RENDER_HEADER_ID, true)
-                        .set(HtmlRenderer.SOFT_BREAK, "<br>")
-                        .set(HtmlRenderer.GENERATE_HEADER_ID, true);
+        DataHolder options = PegdownOptionsAdapter.flexmarkOptions(true, PegdownExtensions.ALL)
+                .toMutable()
+                .set(Parser.EXTENSIONS, Collections.singleton(YamlFrontMatterExtension.create()))
+                .set(HtmlRenderer.RENDER_HEADER_ID, true)
+                .set(HtmlRenderer.SOFT_BREAK, "<br>")
+                .set(HtmlRenderer.GENERATE_HEADER_ID, true);
         Parser markdownParser = Parser.builder(options).build();
         HtmlRenderer htmlRenderer = HtmlRenderer.builder(options).build();
         Node node = markdownParser.parse("");
@@ -63,14 +61,13 @@ public class MarkdownUtil {
     }
 
     public static Post format(String markdownTitle, String markdownText) {
-        DataHolder options =
-                PegdownOptionsAdapter.flexmarkOptions(true, PegdownExtensions.ALL)
-                        .toMutable()
-                        .set(Parser.EXTENSIONS, Collections.singleton(YamlFrontMatterExtension.create()))
-                        .set(HtmlRenderer.RENDER_HEADER_ID, true)
-                        .set(HtmlRenderer.SOFT_BREAK, "<br>")
-                        .set(HtmlRenderer.GENERATE_HEADER_ID, true)
-                        .set(HtmlRenderer.FENCED_CODE_LANGUAGE_CLASS_PREFIX, "");
+        DataHolder options = PegdownOptionsAdapter.flexmarkOptions(true, PegdownExtensions.ALL)
+                .toMutable()
+                .set(Parser.EXTENSIONS, Collections.singleton(YamlFrontMatterExtension.create()))
+                .set(HtmlRenderer.RENDER_HEADER_ID, true)
+                .set(HtmlRenderer.SOFT_BREAK, "<br>")
+                .set(HtmlRenderer.GENERATE_HEADER_ID, true)
+                .set(HtmlRenderer.FENCED_CODE_LANGUAGE_CLASS_PREFIX, "");
         Parser markdownParser = Parser.builder(options).build();
         HtmlRenderer htmlRenderer = HtmlRenderer.builder(options).build();
         Node nodes = markdownParser.parse(markdownText);

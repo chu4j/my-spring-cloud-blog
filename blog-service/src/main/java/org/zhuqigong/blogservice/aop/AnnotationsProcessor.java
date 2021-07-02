@@ -27,7 +27,14 @@ public class AnnotationsProcessor {
     public Object process(ProceedingJoinPoint pjp) throws Throwable {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         if (signature.getMethod().isAnnotationPresent(CleanUpCache.class)) {
-            cacheAnnotationHandler.handleInvalidCache();
+            CleanUpCache annotation = signature.getMethod().getAnnotation(CleanUpCache.class);
+            for (CleanUpCache.TYPE type : annotation.value()) {
+                if (CleanUpCache.TYPE.ELEMENT == type) {
+                    cacheAnnotationHandler.handleInvalidCacheElement();
+                } else if (CleanUpCache.TYPE.ELEMENTS == type) {
+                    cacheAnnotationHandler.handleInvalidCacheElements();
+                }
+            }
         }
         return pjp.proceed();
     }

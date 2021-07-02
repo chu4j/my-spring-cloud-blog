@@ -57,7 +57,7 @@ public class ApplicationReadyTask {
             String markdownTitle = file.getName().replace(".md", "");
             String markdownText = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             Post post = MarkdownUtil.format(markdownTitle, markdownText);
-            postService.saveOrUpdatePost(post);
+            postService.createOrUpdatePost(post);
         }
     }
 

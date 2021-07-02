@@ -20,7 +20,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public Map<String, Object> findPosts(@RequestParam int page, @RequestParam int size) {
-        return postService.getPosts(page, size);
+        return postService.findPosts(page, size);
     }
 
     @GetMapping("/post/id/{postId}")
@@ -30,26 +30,26 @@ public class PostController {
 
     @GetMapping("/post/title/{postTitle}")
     public Post getPostByPostTitle(@PathVariable String postTitle) throws PostNotFoundException {
-        return postService.findPostByPostTitle(postTitle);
+        return postService.findPostByPostTitleName(postTitle);
     }
 
     @GetMapping("/category/{categoryName}")
     public Map<String, Object> getPostByCategoryName(@PathVariable String categoryName,
                                                      @RequestParam Integer page, @RequestParam Integer size)
             throws NotFoundException {
-        return postService.findPostByCategory(categoryName, page, size);
+        return postService.findPostByCategoryName(categoryName, page, size);
     }
 
     @GetMapping("/tag/{tagName}")
     public Map<String, Object> getPostByTagName(@PathVariable String tagName, Integer page, Integer size)
             throws NotFoundException {
-        return postService.findPostByTag(tagName, page, size);
+        return postService.findPostByTagName(tagName, page, size);
     }
 
     @GetMapping("/tiny/posts")
     @SuppressWarnings("unchecked")
     public Map<String, Object> getTinyPosts(@RequestParam Integer page, @RequestParam Integer size) {
-        Map<String, Object> data = postService.getPosts(page, size);
+        Map<String, Object> data = postService.findPosts(page, size);
         ((Collection<Post>) data.get("list"))
                 .forEach(e -> {
                     e.setContentBody(null);

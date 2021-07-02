@@ -45,9 +45,9 @@ public class Post {
     private String remark2;
     private String remark3;
     @Transient
-    private NexusPost prevPost;
+    private LatelyPost prevPost;
     @Transient
-    private NexusPost nextPost;
+    private LatelyPost nextPost;
 
     public String getContent() {
         return content;
@@ -169,30 +169,30 @@ public class Post {
         this.publishTime = publishTime;
     }
 
-    public NexusPost getPrevPost() {
+    public LatelyPost getPrevPost() {
         return prevPost;
     }
 
-    public void setPrevPost(NexusPost prevPost) {
+    public void setPrevPost(LatelyPost prevPost) {
         this.prevPost = prevPost;
     }
 
-    public NexusPost getNextPost() {
+    public LatelyPost getNextPost() {
         return nextPost;
     }
 
-    public void setNextPost(NexusPost nextPost) {
+    public void setNextPost(LatelyPost nextPost) {
         this.nextPost = nextPost;
     }
 
-    public static class NexusPost {
+    public static class LatelyPost {
         private Long id;
         private String title;
 
-        public NexusPost() {
+        public LatelyPost() {
         }
 
-        public NexusPost(Long id, String title) {
+        public LatelyPost(Long id, String title) {
             this.id = id;
             this.title = title;
         }

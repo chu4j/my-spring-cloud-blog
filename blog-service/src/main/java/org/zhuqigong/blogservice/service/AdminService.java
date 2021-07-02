@@ -1,7 +1,6 @@
 package org.zhuqigong.blogservice.service;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +11,6 @@ import org.zhuqigong.blogservice.util.MarkdownUtil;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -38,20 +36,17 @@ public class AdminService {
     }
 
     public void saveMarkdownFile(MultipartFile[] files) {
-        Arrays.stream(files)
-                .filter(file -> null != file.getOriginalFilename() && file.getOriginalFilename().endsWith(".md"))
-                .map(file -> {
-                    try {
-                        return Pair.of(file.getOriginalFilename().replace(".md", ""), IOUtils.toString(file.getInputStream(), StandardCharsets.UTF_8));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }).forEach(p -> {
-            if (null != p) {
-                Post post = MarkdownUtil.format(p.getFirst(), p.getSecond());
-                postService.saveOrUpdatePost(post);
+        for (MultipartFile file : files) {
+            String originFileName = file.getOriginalFilename();
+            if (null != originFileName && originFileName.endsWith(".md")) {
+                try {
+                    String fileContent = IOUtils.toString(file.getInputStream(), StandardCharsets.UTF_8);
+                    Post post = MarkdownUtil.format(file.getName(), fileContent);
+                    postService.createOrUpdatePost(post);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        }
     }
 }

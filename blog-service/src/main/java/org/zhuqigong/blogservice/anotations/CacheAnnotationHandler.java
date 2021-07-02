@@ -6,20 +6,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.zhuqigong.blogservice.model.Post;
 
-import java.util.Collection;
+import java.util.List;
 
 @Component
 public class CacheAnnotationHandler {
     private static final Logger log = LoggerFactory.getLogger(CacheAnnotationHandler.class);
-    private final Cache<String, Collection<Post>> cache;
+    private final Cache<String, List<Post>> cachePostElements;
+    private final Cache<String, Post> cachePostElement;
 
-    public CacheAnnotationHandler(Cache<String, Collection<Post>> cache) {
-        this.cache = cache;
+    public CacheAnnotationHandler(Cache<String, List<Post>> cachePostElements, Cache<String, Post> cachePostElement) {
+        this.cachePostElements = cachePostElements;
+        this.cachePostElement = cachePostElement;
     }
 
-    public void handleInvalidCache() {
-        cache.invalidateAll();
-        cache.cleanUp();
-        log.info("Invalid date all caffeine cache done");
+    public void handleInvalidCacheElements() {
+        cachePostElements.invalidateAll();
+        cachePostElements.cleanUp();
+        log.info("Invalid post elements success");
+    }
+
+    public void handleInvalidCacheElement() {
+        cachePostElement.invalidateAll();
+        cachePostElement.cleanUp();
+        log.info("Invalid post element success");
     }
 }
