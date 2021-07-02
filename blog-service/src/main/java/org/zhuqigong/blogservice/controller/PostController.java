@@ -6,7 +6,6 @@ import org.zhuqigong.blogservice.exception.PostNotFoundException;
 import org.zhuqigong.blogservice.model.Post;
 import org.zhuqigong.blogservice.service.PostService;
 
-import java.util.Collection;
 import java.util.Map;
 
 @RestController
@@ -20,7 +19,7 @@ public class PostController {
 
     @GetMapping("/posts")
     public Map<String, Object> findPosts(@RequestParam int page, @RequestParam int size) {
-        return postService.findPosts(page, size);
+        return postService.findAllPost(page, size);
     }
 
     @GetMapping("/post/id/{postId}")
@@ -47,21 +46,7 @@ public class PostController {
     }
 
     @GetMapping("/tiny/posts")
-    @SuppressWarnings("unchecked")
     public Map<String, Object> getTinyPosts(@RequestParam Integer page, @RequestParam Integer size) {
-        Map<String, Object> data = postService.findPosts(page, size);
-        ((Collection<Post>) data.get("list"))
-                .forEach(e -> {
-                    e.setContentBody(null);
-                    e.setContent(null);
-                    e.setTags(null);
-                    e.setCategories(null);
-                    e.setAuthor(null);
-                    e.setCatalogue(null);
-                    e.setCatalogueBody(null);
-                    e.setLastUpdatedTime(null);
-                    e.setCreatedTime(null);
-                });
-        return data;
+        return postService.findAllMinPost(page, size);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.zhuqigong.blogservice.anotations.CleanUpCache;
 import org.zhuqigong.blogservice.exception.NotFoundException;
 import org.zhuqigong.blogservice.exception.PostNotFoundException;
+import org.zhuqigong.blogservice.model.MinPost;
 import org.zhuqigong.blogservice.model.Post;
 import org.zhuqigong.blogservice.model.ResponseEntityBuilder;
 import org.zhuqigong.blogservice.repository.CategoryRepository;
@@ -54,18 +55,18 @@ public class PostService {
         this.postCacheOps = postCacheOps;
     }
 
-    public Map<String, Object> findPosts(int pageNumber, int size) {
+    public Map<String, Object> findAllPost(int pageNumber, int size) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, size, Sort.by(SORT_PROPERTIES).descending());
         long total = postDao.count();
         int totalPage = PageParamsUtil.calculateTotalPage(total, size);
         LOGGER.info("Get Post : page:[{}],size:[{}]", pageNumber, size);
         String cacheKey = postCacheOps.generateKeyByRequestUrl();
         LOGGER.info("Cache Key :[{}]", cacheKey);
-        List<Post> cachePostList = postCacheOps.getElements(cacheKey);
-        if (cachePostList.isEmpty()) {
+        List<Post> cachePosts = postCacheOps.getElements(cacheKey);
+        if (cachePosts.isEmpty()) {
             LOGGER.info("Cache Not Found");
             List<Post> data = postDao.findAll(pageRequest).toList();
-            postCacheOps.saveOrUpdateElements(cacheKey, data);
+            postCacheOps.set(cacheKey, data);
             return new ResponseEntityBuilder().statusCode(200).message("request success")
                     .append(TOTAL, total)
                     .append(TOTAL_PAGE, totalPage)
@@ -78,9 +79,20 @@ public class PostService {
                     .append(TOTAL, total)
                     .append(TOTAL_PAGE, totalPage)
                     .append(CURRENT_PAGE, pageNumber)
-                    .append(DATA, cachePostList)
+                    .append(DATA, cachePosts)
                     .build();
         }
+    }
+
+    public Map<String, Object> findAllMinPost(int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        final Page<MinPost> pagePost = postDao.findAllMinPost(pageRequest);
+        return new ResponseEntityBuilder().statusCode(200).message("Get post success")
+                .append(TOTAL, pagePost.getTotalElements())
+                .append(TOTAL_PAGE, PageParamsUtil.calculateTotalPage(pagePost.getTotalElements(), pageSize))
+                .append(CURRENT_PAGE, pageNumber)
+                .append(DATA, pagePost.getContent())
+                .build();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -155,7 +167,7 @@ public class PostService {
                 post.setNextPost(new Post.LatelyPost(nextPost.getId(), nextPost.getTitle()));
             }
             LOGGER.info("Cache Key Not Found,Cache Key:[{}]", cacheKey);
-            postCacheOps.saveOrUpdateElement(cacheKey, post);
+            postCacheOps.set(cacheKey, post);
             return post;
         } else {
             LOGGER.info("Cache Key Found,Cache Key[{}]", cacheKey);
@@ -169,7 +181,7 @@ public class PostService {
         Post cachePost = postCacheOps.getElement(cacheKey);
         if (cachePost == null) {
             Post post = postDao.findPostByTitle(titleName).orElseThrow(() -> new PostNotFoundException("Post not found.Post title : " + titleName));
-            postCacheOps.saveOrUpdateElement(cacheKey, post);
+            postCacheOps.set(cacheKey, post);
             return post;
         } else {
             return cachePost;
@@ -186,7 +198,7 @@ public class PostService {
             Page<Post> pagePost = postDao.findPostByCategoriesIn(categoryName, pageRequest).orElseThrow(() -> new PostNotFoundException(String.format("Can Not Found Post :Category:[%s]", categoryName)));
             long total = pagePost.getTotalElements();
             int totalPage = PageParamsUtil.calculateTotalPage(total, size);
-            postCacheOps.saveOrUpdateElements(cacheKey, pagePost.getContent());
+            postCacheOps.set(cacheKey, pagePost.getContent());
             return new ResponseEntityBuilder().statusCode(200).message("request post by category success")
                     .append(TOTAL, total)
                     .append(TOTAL_PAGE, totalPage)
@@ -213,7 +225,7 @@ public class PostService {
             Page<Post> pagePost = postDao.findPostByTagsIn(tagName, pageRequest).orElseThrow(() -> new PostNotFoundException(String.format("Can Not Found Post :Tag:[%s]", tagName)));
             long total = pagePost.getTotalElements();
             int totalPage = PageParamsUtil.calculateTotalPage(total, size);
-            postCacheOps.saveOrUpdateElements(cacheKey, pagePost.getContent());
+            postCacheOps.set(cacheKey, pagePost.getContent());
             return new ResponseEntityBuilder().statusCode(200).message("get post by tag success")
                     .append(TOTAL, total)
                     .append(TOTAL_PAGE, totalPage)

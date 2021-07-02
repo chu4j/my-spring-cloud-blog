@@ -63,7 +63,7 @@ public class AdminController {
     @GetMapping("/posts")
     @PreAuthorize("hasAnyAuthority({'ADMIN','USER'})")
     public Map<String, Object> findPosts(@RequestParam int page, @RequestParam int size) {
-        return postService.findPosts(page, size);
+        return postService.findAllPost(page, size);
     }
 
     @PostMapping("/post/create")

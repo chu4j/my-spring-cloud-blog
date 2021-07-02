@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.zhuqigong.blogservice.model.MinPost;
 import org.zhuqigong.blogservice.model.Post;
 
 import java.util.Date;
@@ -34,4 +35,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(nativeQuery = true, value = "select count(*) from POST left join POST_CATEGORY on  POST.ID = POST_CATEGORY.POST_ID left join CATEGORY on POST_CATEGORY.CATEGORIES_ID=CATEGORY.ID where CATEGORY.CATEGORY_NAME=:categoryName")
     long countPostByCategoriesIn(String categoryName);
+
+    @Query(nativeQuery = true, value = "select POST.ID,POST.TITLE,POST.PUBLISH_TIME as publishTime from POST order by PUBLISH_TIME DESC ", countQuery = "select count(POST.ID) from POST")
+    Page<MinPost> findAllMinPost(Pageable pageable);
 }

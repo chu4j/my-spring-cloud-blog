@@ -49,11 +49,11 @@ public class PostCacheOps {
         return cacheElement.get(key, x -> null);
     }
 
-    public void saveOrUpdateElements(String key, List<Post> value) {
+    public void set(String key, List<Post> value) {
         cacheElements.put(key, value);
     }
 
-    public void saveOrUpdateElement(String key, Post value) {
+    public void set(String key, Post value) {
         cacheElement.put(key, value);
     }
 }
