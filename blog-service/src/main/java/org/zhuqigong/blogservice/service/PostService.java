@@ -85,11 +85,10 @@ public class PostService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @CleanUpCache({CleanUpCache.TYPE.ELEMENT, CleanUpCache.TYPE.ELEMENTS})
-    public Map<String, Object> createOrUpdatePost(Post persistPost) {
-        if (null != persistPost.getId()) {
-            Post oldPost = postDao.findById(persistPost.getId()).orElse(new Post());
-            String title = oldPost.getTitle();
-            Post post = MarkdownUtil.format(persistPost.getTitle(), persistPost.getContent());
+    public Map<String, Object> createOrUpdatePost(Long id, String title, String content) {
+        if (id != null) {
+            Post oldPost = postDao.findById(id).orElse(new Post());
+            Post post = MarkdownUtil.format(title, content);
             post.setId(oldPost.getId());
             categoryDao.deleteAll(oldPost.getCategories());
             tagDao.deleteAll(oldPost.getTags());
@@ -110,13 +109,12 @@ public class PostService {
                     .append("id", post.getId())
                     .build();
         } else {
-            Post repeatTitlePost = postDao.findPostByTitle(persistPost.getTitle()).orElse(null);
+            Post repeatTitlePost = postDao.findPostByTitle(title).orElse(null);
             if (repeatTitlePost == null) {
-                Post post = MarkdownUtil.format(persistPost.getTitle(), persistPost.getContent());
+                Post post = MarkdownUtil.format(title, content);
                 categoryDao.saveAll(post.getCategories());
                 tagDao.saveAll(post.getTags());
                 LOGGER.info("Create Post:Post title:{}", post.getTitle());
-                post.setRemark1(persistPost.getRemark1());
                 postDao.save(post);
                 //Save markdown text as file
                 String markdownFilePath = markdownFileDirectory + File.separator + post.getTitle() + ".md";
@@ -142,12 +140,12 @@ public class PostService {
 
     }
 
-    public Post findPostByPostId(Long postId) throws PostNotFoundException {
+    public Post findPostById(Long id) throws PostNotFoundException {
         String cacheKey = postCacheOps.generateKeyByRequestUrl();
         Post cachePost = postCacheOps.getElement(cacheKey);
-        LOGGER.info("Get Post By Id : Post Id:[{}]", postId);
+        LOGGER.info("Get Post By Id : Post Id:[{}]", id);
         if (cachePost == null) {
-            Post post = postDao.findById(postId).orElseThrow(() -> new PostNotFoundException("Post not found.Post id:" + postId));
+            Post post = postDao.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found.Post id:" + id));
             Post prevPost = postDao.findFirstByPublishTimeAfterOrderByPublishTimeAsc(post.getPublishTime());
             Post nextPost = postDao.findFirstByPublishTimeBeforeOrderByPublishTimeDesc(post.getPublishTime());
             if (null != prevPost) {
@@ -165,12 +163,12 @@ public class PostService {
         }
     }
 
-    public Post findPostByPostTitleName(String postTitleName) throws PostNotFoundException {
-        LOGGER.info("Get Post By Title:Post Title:[{}]", postTitleName);
+    public Post findPostByTitleName(String titleName) throws PostNotFoundException {
+        LOGGER.info("Get Post By Title:Post Title:[{}]", titleName);
         String cacheKey = postCacheOps.generateKeyByRequestUrl();
         Post cachePost = postCacheOps.getElement(cacheKey);
         if (cachePost == null) {
-            Post post = postDao.findPostByTitle(postTitleName).orElseThrow(() -> new PostNotFoundException("Post not found.Post title : " + postTitleName));
+            Post post = postDao.findPostByTitle(titleName).orElseThrow(() -> new PostNotFoundException("Post not found.Post title : " + titleName));
             postCacheOps.saveOrUpdateElement(cacheKey, post);
             return post;
         } else {

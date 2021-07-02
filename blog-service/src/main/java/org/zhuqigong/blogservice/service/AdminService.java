@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.zhuqigong.blogservice.model.Post;
 import org.zhuqigong.blogservice.model.User;
 import org.zhuqigong.blogservice.repository.UserRepository;
 import org.zhuqigong.blogservice.util.MarkdownUtil;
@@ -41,8 +40,7 @@ public class AdminService {
             if (null != originFileName && originFileName.endsWith(".md")) {
                 try {
                     String fileContent = IOUtils.toString(file.getInputStream(), StandardCharsets.UTF_8);
-                    Post post = MarkdownUtil.format(file.getName(), fileContent);
-                    postService.createOrUpdatePost(post);
+                    postService.createOrUpdatePost(null, file.getName(), fileContent);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

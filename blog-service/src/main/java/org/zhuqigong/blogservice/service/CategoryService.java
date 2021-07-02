@@ -1,7 +1,7 @@
 package org.zhuqigong.blogservice.service;
 
 import org.springframework.stereotype.Service;
-import org.zhuqigong.blogservice.model.Category;
+import org.zhuqigong.blogservice.model.CategoryStatistics;
 import org.zhuqigong.blogservice.repository.CategoryRepository;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> findCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryStatistics> countCategories() {
+        return categoryRepository.countCategories();
     }
 }

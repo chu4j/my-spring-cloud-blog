@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.zhuqigong.blogservice.model.AdminDetails;
-import org.zhuqigong.blogservice.model.Post;
 import org.zhuqigong.blogservice.model.ResponseEntityBuilder;
 import org.zhuqigong.blogservice.model.User;
 import org.zhuqigong.blogservice.service.AdminDetailsService;
@@ -71,13 +70,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Map<String, Object> createNewPost(@RequestParam(required = false) Long id, @RequestParam String title,
                                              @RequestParam String content) {
-        Post p = new Post();
-        if (null != id) {
-            p.setId(id);
-        }
-        p.setTitle(title);
-        p.setContent(content);
-        return postService.createOrUpdatePost(p);
+        return postService.createOrUpdatePost(id, title, content);
     }
 
     @DeleteMapping("/post/delete/id/{postId}")

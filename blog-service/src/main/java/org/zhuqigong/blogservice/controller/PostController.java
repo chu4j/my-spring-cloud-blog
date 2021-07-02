@@ -25,12 +25,12 @@ public class PostController {
 
     @GetMapping("/post/id/{postId}")
     public Post getPostByPostId(@PathVariable Long postId) throws PostNotFoundException {
-        return postService.findPostByPostId(postId);
+        return postService.findPostById(postId);
     }
 
     @GetMapping("/post/title/{postTitle}")
     public Post getPostByPostTitle(@PathVariable String postTitle) throws PostNotFoundException {
-        return postService.findPostByPostTitleName(postTitle);
+        return postService.findPostByTitleName(postTitle);
     }
 
     @GetMapping("/category/{categoryName}")

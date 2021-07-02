@@ -8,13 +8,11 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.zhuqigong.blogservice.model.Post;
 import org.zhuqigong.blogservice.model.User;
 import org.zhuqigong.blogservice.model.UserRole;
 import org.zhuqigong.blogservice.repository.UserRepository;
 import org.zhuqigong.blogservice.repository.UserRoleRepository;
 import org.zhuqigong.blogservice.service.PostService;
-import org.zhuqigong.blogservice.util.MarkdownUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class ApplicationReadyTask {
@@ -49,16 +47,17 @@ public class ApplicationReadyTask {
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadingMarkdownStartUp() throws IOException {
-        List<File> mdFiles = Files.walk(Paths.get(path), 8)
-                .map(Path::toFile)
-                .filter(file -> file.getName().endsWith(".md"))
-                .collect(Collectors.toList());
-        for (File file : mdFiles) {
-            String markdownTitle = file.getName().replace(".md", "");
-            String markdownText = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            Post post = MarkdownUtil.format(markdownTitle, markdownText);
-            postService.createOrUpdatePost(post);
+        try (final Stream<Path> walk = Files.walk(Paths.get(path), 8)) {
+            for (File file : walk.map(Path::toFile)
+                    .filter(file -> file.getName().endsWith(".md"))
+                    .collect(Collectors.toList())) {
+                String title = file.getName().replace(".md", "");
+                String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+                postService.createOrUpdatePost(null, title, content);
+            }
         }
+
+
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -68,6 +67,6 @@ public class ApplicationReadyTask {
         User admin = new User(defaultUser, encoder.encode(defaultPassword));
         admin.setUserRoles(Collections.singletonList(adminRole));
         userRepository.save(admin);
-        LOG.info("Default User save success");
+        LOG.info("Default User save success,username:{},password:{}", defaultUser, defaultPassword);
     }
 }
