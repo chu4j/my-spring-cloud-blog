@@ -12,4 +12,5 @@ import java.util.List;
 public class DownloadDictReq {
     private List<TableNameRes> tables;
     private String fileName;
+    private String website;
 }

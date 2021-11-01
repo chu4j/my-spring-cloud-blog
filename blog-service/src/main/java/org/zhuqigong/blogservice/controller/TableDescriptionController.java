@@ -39,7 +39,7 @@ public class TableDescriptionController {
         Objects.requireNonNull(req);
         final String fileName = StringUtils.isBlank(req.getFileName()) ? "mysql-dictionary.docx" : req.getFileName() + ".docx";
         final String uuidFileName = UUID.randomUUID() + ".docx";
-        mysqlService.exportDocument(req.getTables(), uuidFileName,request);
+        mysqlService.exportDocument(req.getTables(), uuidFileName, req.getWebsite());
         final File file = new File(databaseConfig.getExportFilePath() + uuidFileName);
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
