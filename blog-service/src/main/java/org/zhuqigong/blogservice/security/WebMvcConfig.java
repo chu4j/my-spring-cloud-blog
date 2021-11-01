@@ -22,7 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowCredentials(true)
                 .allowedOrigins(origins)
-                .allowedHeaders("*")
+                .exposedHeaders("Content-Disposition")
                 .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
     }
 }

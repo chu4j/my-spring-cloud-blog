@@ -89,6 +89,11 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.zhuqg.dict</groupId>
+            <artifactId>mysqldict-generator</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -101,13 +106,15 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${project.parent.version}</version>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
             </plugin>
         </plugins>
     </build>

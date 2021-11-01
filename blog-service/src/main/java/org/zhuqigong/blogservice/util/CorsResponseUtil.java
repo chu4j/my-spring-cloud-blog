@@ -18,7 +18,7 @@ public class CorsResponseUtil {
         }
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Content-Disposition, Access-Control-Expose-Headers");
         response.setStatus(200);
     }
 }
