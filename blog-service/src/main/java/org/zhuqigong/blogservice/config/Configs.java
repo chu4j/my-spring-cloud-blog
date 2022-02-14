@@ -27,7 +27,7 @@ public class Configs {
                     .build();
         } else if (STOREFRONT.equalsIgnoreCase(databaseName)) {
             return DatabaseConfig.builder()
-                    .url("jdbc:mysql://103.215.45.138:3306/ehc-saas?autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=Asia/Shanghai")
+                    .url("jdbc:mysql://103.215.45.138:3306/storefront?autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=Asia/Shanghai")
                     .user("root")
                     .password(password2)
                     .tableSchema(STOREFRONT)
