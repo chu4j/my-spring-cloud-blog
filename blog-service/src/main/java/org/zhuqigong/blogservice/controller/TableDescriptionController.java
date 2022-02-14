@@ -9,11 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.zhuqg.dict.entity.DatabaseConfig;
+import org.zhuqigong.blogservice.config.Configs;
 import org.zhuqigong.blogservice.model.DownloadDictReq;
 import org.zhuqigong.blogservice.model.TableNameRes;
 import org.zhuqigong.blogservice.service.MysqlService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,25 +21,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * @author k
+ */
 @RestController
 @RequestMapping("/blog/table")
 public class TableDescriptionController {
     @Autowired
-    private DatabaseConfig databaseConfig;
-    @Autowired
     private MysqlService mysqlService;
+    @Autowired
+    private Configs configs;
 
-    @GetMapping("/tables")
-    public List<TableNameRes> getTables() {
-        return mysqlService.getTableNameList();
+    @GetMapping("/tables/{databaseName}")
+    public List<TableNameRes> getTables(@PathVariable("databaseName") String databaseName) {
+        return mysqlService.getTableNameList(databaseName);
     }
 
-    @PostMapping("download")
-    public ResponseEntity<Resource> downloadMysqlDict(@RequestBody DownloadDictReq req, HttpServletRequest request) throws FileNotFoundException {
+    @PostMapping("download/{databaseName}")
+    public ResponseEntity<Resource> downloadMysqlDict(@PathVariable("databaseName") String databaseName, @RequestBody DownloadDictReq req) throws FileNotFoundException {
         Objects.requireNonNull(req);
         final String fileName = StringUtils.isBlank(req.getFileName()) ? "mysql-dictionary.docx" : req.getFileName() + ".docx";
         final String uuidFileName = UUID.randomUUID() + ".docx";
-        mysqlService.exportDocument(req.getTables(), uuidFileName, req.getWebsite());
+        final DatabaseConfig databaseConfig = configs.getDatabaseConfig(databaseName);
+        mysqlService.exportDocument(databaseConfig, req.getTables(), uuidFileName, req.getWebsite());
         final File file = new File(databaseConfig.getExportFilePath() + uuidFileName);
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
