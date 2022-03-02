@@ -23,6 +23,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .allowedOrigins(origins)
                 .exposedHeaders("Content-Disposition")
-                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+                .allowedMethods("HEAD", "GET","OPTIONS", "PUT", "POST", "DELETE", "PATCH");
     }
 }
