@@ -5,4 +5,4 @@ see : https://github.com/zhuqigong/my-spring-cloud-blog-frontend
 
 #### demo
 
-https://explore.zhuqigong.xyz
+https://www.chujjj.xyz
