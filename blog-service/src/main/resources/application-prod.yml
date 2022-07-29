@@ -15,6 +15,9 @@ logging:
     root: warn
 server:
   port: 8084
+  tomcat:
+    threads:
+      max: 1
 my:
   blog:
     markdown-file:

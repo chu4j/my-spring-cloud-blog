@@ -47,6 +47,13 @@ public class ApplicationReadyTask {
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadingMarkdownStartUp() throws IOException {
+        final File dir = new File(path);
+        if (!dir.exists()) {
+            final boolean flag = dir.mkdirs();
+            if (flag) {
+                LOG.info("创建目录成功 --> {}", path);
+            }
+        }
         try (final Stream<Path> walk = Files.walk(Paths.get(path), 8)) {
             for (File file : walk.map(Path::toFile)
                     .filter(file -> file.getName().endsWith(".md"))
