@@ -50,14 +50,14 @@ pipeline {
         }
         stage('Image build stage') {
             steps {
-                stript {
-                    myImage = docker.build("konchoo1995/blog-service:${env.BUILD_ID}","./blog-service/Dockerfile-Jenkins")
+                script {
+                    myImage = docker.build("konchoo1995/blog-service:${env.BUILD_ID}","./blog-service/docker")
                 }
             }
         }
         stage('Image push stage') {
             steps {
-                stript {
+                script {
                     docker.withRegister('https://registry.hub.docker.com','docker-credentials'){
                         myImage.push("latest")
                         myImage.push("${env.BUILD_ID}")
