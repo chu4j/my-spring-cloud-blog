@@ -60,10 +60,10 @@ pipeline {
             steps {
                 script {
                     container('docker') {
-                        sh '当前构建环境'
+                        echo '当前构建环境'
                         sh 'pwd'
                         sh 'env'
-                        myImage = docker.build("konchoo1995/blog-service:${env.BUILD_ID}", "./blog-service/docker")
+                        myImage = docker.build("konchoo1995/blog-service:${env.BUILD_ID} -f ./blog-service/docker ./blog-service/target")
                     }
                 }
             }
