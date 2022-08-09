@@ -2,17 +2,25 @@ pipeline {
     agent {
         kubernetes {
             yaml '''
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      labels: 
-        app-label: blog-service
-    spec:
-      replicas: 2
-      selector:
-        matchLabels:
-          app: blog-service
-    '''
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          namespace: jenkins
+        spec:
+          containers:
+          - name: docker
+            image: docker
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+            - mountPath: /var/run/docker.sock
+              name: docker-path
+          volumes:
+          - name: docker-path
+            hostPath:
+              path: /var/run/docker.sock
+        '''
             workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'jenkins-pvc', readOnly: false)
         }
     }
@@ -51,16 +59,23 @@ pipeline {
         stage('Image build stage') {
             steps {
                 script {
-                    myImage = docker.build("konchoo1995/blog-service:${env.BUILD_ID}","./blog-service/docker")
+                    container('docker') {
+                        sh '当前构建环境'
+                        sh 'pwd'
+                        sh 'env'
+                        myImage = docker.build("konchoo1995/blog-service:${env.BUILD_ID}", "./blog-service/docker")
+                    }
                 }
             }
         }
         stage('Image push stage') {
             steps {
                 script {
-                    docker.withRegister('https://registry.hub.docker.com','docker-credentials'){
-                        myImage.push("latest")
-                        myImage.push("${env.BUILD_ID}")
+                    container('docker') {
+                        docker.withRegister('https://registry.hub.docker.com', 'docker-credentials') {
+                            myImage.push()
+                            myImage.push("latest")
+                        }
                     }
                 }
             }
